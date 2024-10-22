@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 from app.db import SessionLocal
 import app.models as models
+from app.sql_querys import GET_EMPLOYEES_BY_QUARTER, GET_DEPARTMENTS_ABOVE_AVERAGE
 
 app = FastAPI()
 
@@ -130,4 +131,14 @@ async def upload_employees(file: UploadFile = File(...), db: Session = Depends(g
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Error uploading employees: {str(e)}")
 
+@app.get("/employees_by_quarter/")
+def get_employees_by_quarter(db: Session = Depends(get_db)):
+    results = db.execute(GET_EMPLOYEES_BY_QUARTER).fetchall()
 
+    return [{"department": row[0], "job": row[1], "Q1": row[2], "Q2": row[3], "Q3": row[4], "Q4": row[5]} for row in results]
+
+@app.get("/departments_hiring_above_average/")
+def get_departments_above_average(db: Session = Depends(get_db)):
+    results = db.execute(GET_DEPARTMENTS_ABOVE_AVERAGE).fetchall()
+
+    return [{"id": row[0], "department": row[1], "hired": row[2]} for row in results]
