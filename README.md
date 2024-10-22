@@ -21,3 +21,10 @@ GET /metrics/hired_per_job_and_department - Número de empleados contratados por
 
 GET /metrics/departments_above_average - Lista de departamentos que contrataron más empleados que el promedio en 2021.
 
+## Ejecución
+
+Ejecutar:
+uvicorn app.main:app --reload --host 127.0.0.1 --port 8080
+
+Yo he realizado las pruebas desde postman, con éxito.
+
